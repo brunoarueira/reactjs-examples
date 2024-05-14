@@ -18,7 +18,7 @@
   "homepage": "https://github.com/brunoarueira/reactjs-examples#readme",
   "dependencies": {
     "body-parser": "1.15.2",
-    "express": "4.14.0",
+    "express": ">= 4.19.2",
     "fs": "0.0.2",
     "path": "0.12.7"
   }
