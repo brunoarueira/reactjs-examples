@@ -1,24 +1,24 @@
 {
   "name": "reactjs-examples",
   "version": "1.0.0",
+  "private": true,
   "description": "Some examples using ReactJs that I made to learn.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node quick-start-tutorial/server.js"
+    "dev:api": "npm run dev -w @reactjs-examples/api"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brunoarueira/reactjs-examples.git"
   },
-  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/brunoarueira/reactjs-examples/issues"
   },
   "homepage": "https://github.com/brunoarueira/reactjs-examples#readme",
-  "dependencies": {
-    "express": "^5.2.1"
-  },
   "engines": {
     "node": ">=22.12"
   }
