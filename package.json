@@ -8,7 +8,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "npm run dev -w @reactjs-examples/api"
+    "dev:api": "npm run dev -w @reactjs-examples/api",
+    "dev": "concurrently -k -n api,web -c blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:web": "npm run dev -w @reactjs-examples/web",
+    "build": "npm run build -w @reactjs-examples/web",
+    "typecheck": "npm run typecheck -w @reactjs-examples/web",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -21,5 +29,16 @@
   "homepage": "https://github.com/brunoarueira/reactjs-examples#readme",
   "engines": {
     "node": ">=22.12"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.8",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "typescript-eslint": "^8.73.0"
   }
 }

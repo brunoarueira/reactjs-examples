@@ -1,0 +1,5 @@
+dist/
+package-lock.json
+apps/api/comments.json
+.claude/
+.code-review-graph/
