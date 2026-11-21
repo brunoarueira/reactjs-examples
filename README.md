@@ -10,6 +10,7 @@ one milestone per phase, one issue per step.
 ## Structure
 
 ```
+apps/web   Vite + React 19 + TypeScript (strict); proxies /api to apps/api
 apps/api   Express API serving /api/comments (plain JS until Phase 4)
 ```
 
@@ -18,8 +19,14 @@ apps/api   Express API serving /api/comments (plain JS until Phase 4)
 ```sh
 nvm use        # Node version from .nvmrc
 npm install
-npm run dev:api
+npm run dev        # api on :3000 + web on http://localhost:5173
 ```
+
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | API + web dev server with HMR |
+| `npm run typecheck` | `tsc -b` for the web app |
+| `npm run build` | Typecheck + production build |
 
 ## The original 2016 version
 
