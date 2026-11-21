@@ -22,11 +22,13 @@ npm install
 npm run dev        # api on :3000 + web on http://localhost:5173
 ```
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | API + web dev server with HMR |
-| `npm run typecheck` | `tsc -b` for the web app |
-| `npm run build` | Typecheck + production build |
+| Script              | What it does                          |
+| ------------------- | ------------------------------------- |
+| `npm run dev`       | API + web dev server with HMR         |
+| `npm run typecheck` | `tsc -b` for the web app              |
+| `npm run build`     | Typecheck + production build          |
+| `npm run lint`      | ESLint (type-aware for the web app)   |
+| `npm run format`    | Prettier write (`format:check` in CI) |
 
 ## The original 2016 version
 
