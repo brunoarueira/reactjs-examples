@@ -3,24 +3,8 @@ import { useState, useEffect } from 'react';
 import CommentList from './components/CommentList';
 import CommentForm from './components/CommentForm';
 import type { Comment, NewComment } from './components/CommentTypes';
+import { postComment, getComments } from './api';
 import { logError } from './helpers';
-import { postComment } from './api';
-
-const API_ENDPOINT = '/api/comments';
-
-const fetchData = async function () {
-  try {
-    const response = await fetch(API_ENDPOINT);
-
-    if (!response.ok) throw new Error(`Error status: ${response.status.toString()}`);
-
-    return (await response.json()) as Comment[];
-  } catch (error) {
-    logError(error);
-
-    return [];
-  }
-};
 
 export function App() {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -30,13 +14,29 @@ export function App() {
   };
 
   useEffect(() => {
-    const load = async () => {
-      const data = await fetchData();
+    const controller = new AbortController();
 
-      setComments(data);
+    const load = async () => {
+      try {
+        const signal = controller.signal;
+
+        const data = await getComments(signal);
+
+        setComments(data);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+
+        logError(error);
+      }
     };
 
     void load();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
