@@ -29,6 +29,8 @@ export default defineConfig([
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      // Catches `new Error(...)` without `throw` (and other side-effect-only `new`).
+      'no-new': 'error',
     },
   },
   {
