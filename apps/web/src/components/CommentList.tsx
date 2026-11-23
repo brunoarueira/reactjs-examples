@@ -1,5 +1,5 @@
 import Comment from './Comment';
-import type { CommentData } from './CommentTypes';
+import type { Comment as CommentData } from './CommentTypes';
 
 interface CommentListProps {
   comments: CommentData[];

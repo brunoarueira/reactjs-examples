@@ -1,23 +1,17 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import type { NewComment } from './CommentTypes';
+import { logError } from '../helpers';
 
 const EMPTY_STATE = '';
 
 interface CommentFormProps {
-  onCommentSubmit: (comment: NewComment) => Promise<boolean>;
+  onCommentSubmit: (comment: NewComment) => Promise<void>;
 }
 
 const CommentForm = ({ onCommentSubmit }: CommentFormProps) => {
   const [author, setAuthor] = useState(EMPTY_STATE);
   const [text, setText] = useState(EMPTY_STATE);
-
-  const submit = async (comment: NewComment) => {
-    if (await onCommentSubmit(comment)) {
-      setAuthor(EMPTY_STATE);
-      setText(EMPTY_STATE);
-    }
-  };
 
   const handleSubmit = function (event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,7 +23,14 @@ const CommentForm = ({ onCommentSubmit }: CommentFormProps) => {
       return;
     }
 
-    void submit({ author: trimmedAuthor, text: trimmedText });
+    onCommentSubmit({ author: trimmedAuthor, text: trimmedText })
+      .then(() => {
+        setAuthor(EMPTY_STATE);
+        setText(EMPTY_STATE);
+      })
+      .catch((error: unknown) => {
+        logError(error);
+      });
   };
 
   return (

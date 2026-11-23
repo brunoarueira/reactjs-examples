@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 
 import CommentList from './components/CommentList';
 import CommentForm from './components/CommentForm';
-import type { CommentData, NewComment } from './components/CommentTypes';
+import type { Comment, NewComment } from './components/CommentTypes';
 import { logError } from './helpers';
+import { postComment } from './api';
 
 const API_ENDPOINT = '/api/comments';
 
@@ -13,7 +14,7 @@ const fetchData = async function () {
 
     if (!response.ok) throw new Error(`Error status: ${response.status.toString()}`);
 
-    return (await response.json()) as CommentData[];
+    return (await response.json()) as Comment[];
   } catch (error) {
     logError(error);
 
@@ -22,30 +23,10 @@ const fetchData = async function () {
 };
 
 export function App() {
-  const [comments, setComments] = useState<CommentData[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
-  const handleCommentSubmit = async function ({ author, text }: NewComment) {
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ author, text }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error status: ${response.status.toString()}`);
-      }
-
-      setComments((await response.json()) as CommentData[]);
-
-      return true;
-    } catch (error) {
-      logError(error);
-
-      return false;
-    }
+  const handleCommentSubmit = async (comment: NewComment): Promise<void> => {
+    setComments(await postComment(comment));
   };
 
   useEffect(() => {
