@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import CommentList from './components/CommentList';
 import CommentForm from './components/CommentForm';
 import type { Comment, NewComment } from './components/CommentTypes';
 import { postComment, getComments } from './api';
-import { logError } from './helpers';
+import usePolling from './hooks/usePolling';
+import usePageVisibility from './hooks/usePageVisibility';
 
 export function App() {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -13,35 +14,24 @@ export function App() {
     setComments(await postComment(comment));
   };
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const load = async (signal: AbortSignal) => {
+    const data = await getComments(signal);
 
-    const load = async () => {
-      try {
-        const signal = controller.signal;
+    setComments(data);
+  };
 
-        const data = await getComments(signal);
+  const isVisible = usePageVisibility();
 
-        setComments(data);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
-          return;
-        }
-
-        logError(error);
-      }
-    };
-
-    void load();
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
+  const { error: pollingError } = usePolling(load, isVisible, 2000);
 
   return (
     <main>
       <h1>Comments</h1>
+      {pollingError && (
+        <div style={{ display: 'block', backgroundColor: 'red', padding: '2px' }} role="alert">
+          Couldn't refresh comments
+        </div>
+      )}
       <CommentList comments={comments} />
       <CommentForm onCommentSubmit={handleCommentSubmit} />
     </main>
